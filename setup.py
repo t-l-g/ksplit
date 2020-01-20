@@ -21,10 +21,13 @@
 #  THE SOFTWARE.
 
 import setuptools
-import os
+from Cython.Build import cythonize
+import numpy as np
 
 exec(compile(open('ksplit/ksplit_version.py').read(),
              'ksplit/ksplit_version.py', 'exec'))
+
+ext_modules = cythonize('ksplit/kmers.pyx')
 
 long_description = open('README.md', encoding='utf-8').read()
 packages = setuptools.find_packages()
@@ -50,6 +53,8 @@ setuptools.setup(name = 'ksplit',
       platforms = ['Any'],
       classifiers = classifiers,
       packages = packages,
+      ext_modules = ext_modules,
+      include_dirs = [np.get_include()],
       entry_points={
           'console_scripts': [
               'ksplit = ksplit.main:main',
