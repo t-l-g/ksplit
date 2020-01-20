@@ -1,7 +1,9 @@
 import pyximport
-pyximport.install(build_dir='.', build_in_temp=False)
-
 import numpy as np
+pyximport.install(setup_args={
+    'include_dirs': np.get_include()
+    })
+
 from ksplit import kmers
 
 def test_kmers():
