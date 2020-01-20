@@ -1,7 +1,7 @@
 import pyximport
 pyximport.install(build_dir='.', build_in_temp=False)
 
-
+import numpy as np
 from ksplit import kmers
 
 def test_kmers():
@@ -29,3 +29,30 @@ def test_kmers1():
     assert len(testing) == 31
     assert len(ks) == 1
 
+def rc(t):
+    rcd = {
+        'A': 'T',
+        'T': 'A',
+        'C': 'G',
+        'G': 'C',
+    }
+    return ''.join([rcd[c] for c in t[::-1]])
+
+
+def test_kmers_reverse():
+    for t in [
+            'TTATACATACTGTTGGTATGATAATAGTATA',
+            'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
+            'ATTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
+            'AAAAAAAAAAATTTTTTTTTTTTTTTTTTTT',
+            ]:
+        assert np.all(kmers.kmers(t.encode('ascii'))
+                    == kmers.kmers(rc(t).encode('ascii')))
+
+
+def test_kmers_reverse_embed():
+    k = 'TTATACATACTGTTGGTATGATAATAGTATA'
+
+    t0 = k + 'C'
+    t1 = rc(k) + 'T'
+    assert kmers.kmers(t0.encode('ascii'))[0] == kmers.kmers(t1.encode('ascii'))[0]
