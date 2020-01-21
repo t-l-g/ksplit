@@ -20,7 +20,7 @@ def encode_fastq(args, ifile, out):
         ks = []
         for seq in seqs:
             # Below is a major hack, but this was actually done by SOAP too
-            seq = seq.replace(b'N', b'A')
+            seq = seq.seq.replace(b'N', b'A')
             k = kmers.kmers(seq)
             if k is None:
                 raise ValueError("Something wrong!")

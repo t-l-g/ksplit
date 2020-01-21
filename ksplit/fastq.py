@@ -1,3 +1,7 @@
+from collections import namedtuple
+
+FastQSeq = namedtuple('FastQSeq', ['header', 'seq', 'qs'])
+
 def fastq_iter1(ifile):
     '''
     for h, seq in fastq_iter1(open('example.fq', 'rb'))):
@@ -10,15 +14,15 @@ def fastq_iter1(ifile):
         qs = ifile.readline()
         if not qs:
             break
-        yield h, seq.strip()
+        yield FastQSeq(h, seq.strip(), qs.strip())
 
 
 def fastq_iter(base):
     '''
-    Read in an interleaved FastQ
+    Read in an interleaved FastQ as an iterator
 
-    This is an iterator over **just the sequence information** and supports
-    optionally-interleaved format. It yields tuples of 1 or 2 sequences.
+    This is function supports optionally-interleaved format. It yields tuples
+    of 1 or 2 sequences.
 
     Two adjacent reads are considered to form a pair if their headers are
     identical; otherwise they are considered single-end.
@@ -33,18 +37,15 @@ def fastq_iter(base):
             [mate1, mate2] = seqs
     '''
 
-    prev_h = ''
-    prev_seq = None
-    for h,seq in fastq_iter1(base):
-        if prev_h != h:
-            if prev_seq is not None:
-                yield (prev_seq,)
-            prev_h = h
-            prev_seq = seq
+    prev = None
+    for seq in fastq_iter1(base):
+        if prev is None:
+            prev = seq
+        elif prev.header != seq.header:
+            yield (prev,)
+            prev = seq
         else:
-            yield (prev_seq, seq)
-            prev_h = ''
-            prev_seq = None
-    if prev_seq is not None:
-        yield (prev_seq,)
-
+            yield (prev, seq)
+            prev = None
+    if prev is not None:
+        yield (prev,)
