@@ -2,6 +2,21 @@ from collections import namedtuple
 
 FastQSeq = namedtuple('FastQSeq', ['header', 'seq', 'qs'])
 
+def _compatible(h0, h1):
+    # This is a bit ugly, but works
+    if h0 == h1: return True
+    if type(h0) == str and \
+            h0.endswith('/1') and \
+            h1.endswith('/2') and \
+            h0[:-2] == h1[:-2]:
+                return True
+    if type(h0) == bytes and \
+            h0.endswith(b'/1') and \
+            h1.endswith(b'/2') and \
+            h0[:-2] == h1[:-2]:
+                return True
+    return False
+
 def fastq_iter1(ifile):
     '''
     for h, seq in fastq_iter1(open('example.fq', 'rb'))):
@@ -14,7 +29,7 @@ def fastq_iter1(ifile):
         qs = ifile.readline()
         if not qs:
             break
-        yield FastQSeq(h, seq.strip(), qs.strip())
+        yield FastQSeq(h.strip(), seq.strip(), qs.strip())
 
 
 def fastq_iter(base):
@@ -41,11 +56,11 @@ def fastq_iter(base):
     for seq in fastq_iter1(base):
         if prev is None:
             prev = seq
-        elif prev.header != seq.header:
-            yield (prev,)
-            prev = seq
-        else:
+        elif _compatible(prev.header, seq.header):
             yield (prev, seq)
             prev = None
+        else:
+            yield (prev,)
+            prev = seq
     if prev is not None:
         yield (prev,)
