@@ -1,20 +1,21 @@
+# cython: language_level=3
 import numpy as np
 cimport numpy as np
 
 from libc.stdint cimport uint8_t, uint64_t
 
-cdef uint64_t encode_nt(char nt):
-    if nt == 'A': return 0
-    if nt == 'C': return 1
-    if nt == 'T': return 2
-    if nt == 'G': return 3
+cdef uint64_t encode_nt(char nt) nogil:
+    if nt == b'A': return 0
+    if nt == b'C': return 1
+    if nt == b'T': return 2
+    if nt == b'G': return 3
     return -1
 
-cdef uint64_t encode_nt_c(char nt):
-    if nt == 'A': return encode_nt('T')
-    if nt == 'C': return encode_nt('G')
-    if nt == 'T': return encode_nt('A')
-    if nt == 'G': return encode_nt('C')
+cdef uint64_t encode_nt_c(char nt) nogil:
+    if nt == b'A': return encode_nt(b'T')
+    if nt == b'C': return encode_nt(b'G')
+    if nt == b'T': return encode_nt(b'A')
+    if nt == b'G': return encode_nt(b'C')
     return -1
 
 cdef _kmers(char* seq, int n):

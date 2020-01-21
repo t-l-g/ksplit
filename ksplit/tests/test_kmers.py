@@ -61,3 +61,14 @@ def test_kmers_reverse_embed():
 
 def test_max62():
     assert len('{:b}'.format(kmers.kmers('GACATAGCGACGCGGACCCCCTTTTTTTTTTGG'.encode('ascii')).max())) <= 62
+
+def test_kmers_different():
+    ks = [
+        'TTATACATACTGTTGGTATGATAATAGTATA',
+        'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
+        'ATTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
+        'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTA',
+        ]
+    ks = [kmers.kmers(k.encode('ascii'))[0] for k in ks]
+    assert len(ks) == len(set(ks))
+
