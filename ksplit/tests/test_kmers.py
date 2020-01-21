@@ -58,3 +58,6 @@ def test_kmers_reverse_embed():
     t0 = k + 'C'
     t1 = rc(k) + 'T'
     assert kmers.kmers(t0.encode('ascii'))[0] == kmers.kmers(t1.encode('ascii'))[0]
+
+def test_max62():
+    assert len('{:b}'.format(kmers.kmers('GACATAGCGACGCGGACCCCCTTTTTTTTTTGG'.encode('ascii')).max())) <= 62

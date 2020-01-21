@@ -1,14 +1,16 @@
 import numpy as np
 cimport numpy as np
 
-cdef long long encode_nt(char nt):
+from libc.stdint cimport uint8_t, uint64_t
+
+cdef uint64_t encode_nt(char nt):
     if nt == 'A': return 0
     if nt == 'C': return 1
     if nt == 'T': return 2
     if nt == 'G': return 3
     return -1
 
-cdef long long encode_nt_c(char nt):
+cdef uint64_t encode_nt_c(char nt):
     if nt == 'A': return encode_nt('T')
     if nt == 'C': return encode_nt('G')
     if nt == 'T': return encode_nt('A')
@@ -19,9 +21,9 @@ cdef _kmers(char* seq, int n):
     cdef int KMER_SIZE = 31
     out = np.zeros(n - KMER_SIZE + 1, np.uint64)
 
-    cdef long long kmer = 0
-    cdef long long kmer_rc = 0
-    cdef long long nte = 0
+    cdef uint64_t kmer = 0
+    cdef uint64_t kmer_rc = 0
+    cdef uint64_t nte = 0
     cdef int j = 0
     for i in range(n):
         # The kmer of the reverse complement should be the same as that of the
