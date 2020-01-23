@@ -10,9 +10,10 @@ cdef uint32_t _follow(uint32_t [::1] uf, uint32_t v) nogil:
     return v
 
 cdef void _link(uint32_t [::1] uf, uint32_t a, uint32_t b) nogil:
-    cdef uint32_t c = _follow(uf, b)
-    uf[b] = c
-    uf[a] = c
+    cdef uint32_t root_a = _follow(uf, a)
+    cdef uint32_t root_b = _follow(uf, b)
+    uf[a] = root_a
+    uf[root_b] = root_a
 
 cdef void _make_canonical(uint32_t [::1] uf, int n) nogil:
     for i in range(n):
