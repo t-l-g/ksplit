@@ -47,7 +47,7 @@ def sort_partials(args, encoded_stream, tdir, *, block_nbytes=1024*1024*1024):
         ofname = path.join(splits_dir, 'split_{}'.format(len(partials)))
         partials.append(ofname)
         with open(ofname, 'wb') as out:
-            block.sort(axis=0)
+            block = block[np.argsort(block.T[0])]
             out.write(block.data)
     return partials
 
@@ -76,5 +76,5 @@ def merge_stream(bufs, out, block_nbytes):
         bufs = nbufs
         if cur:
             cur = np.concatenate(cur)
-            cur.sort(axis=0)
+            cur = cur[np.argsort(cur.T[0])]
             out.write(cur.data)
