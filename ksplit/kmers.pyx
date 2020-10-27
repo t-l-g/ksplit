@@ -44,4 +44,17 @@ cdef _kmers(char* seq, int n):
     return out
 
 def kmers(seq):
+    '''Compute all kmers for input nucleotide sequence
+
+    Parameters
+    ----------
+    seq : bytes
+        input nucleotide sequence
+
+    Returns
+    -------
+    kmers : ndarray
+        kmers encoded as integers in a NumPy array
+    '''
     return _kmers(<bytes>seq, len(seq))
+
