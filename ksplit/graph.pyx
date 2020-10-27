@@ -20,6 +20,28 @@ cdef void _make_canonical(uint32_t [::1] uf, int n) nogil:
         uf[i] = _follow(uf, i)
 
 def union_find(rs, int n, int block_nbytes):
+    '''Union find algorithm
+
+    Parses a file, which contains pairs of integers `(i,j)` representing edges
+    in a graph and produces connected components.
+
+    Parameters
+    ----------
+    rs : file-like object
+        Should support a `read()` method
+    n : int
+        Number of nodes
+    block_nbytes : int
+        Number of bytes to read at each chunk
+
+    Returns
+    -------
+    uf : ndarray
+        Array representing the connected components:
+        Two elements, `i` and `j` (represented as integers) are in the same CC
+        iff `uf[i] == uf[j]`
+
+    '''
     cdef uint64_t pkm = -1
     cdef uint32_t pn = 0
     cdef uint64_t km
@@ -30,6 +52,9 @@ def union_find(rs, int n, int block_nbytes):
     uf_arr = np.arange(n, dtype=np.uint32)
     cdef uint32_t [::1] uf = uf_arr
 
+
+    # Wikipedia provides a decent overview of the algorithm used here
+    # https://en.wikipedia.org/wiki/Disjoint-set_data_structure
     while True:
         data = rs.read(block_nbytes)
         if not data:
