@@ -24,6 +24,7 @@ import setuptools
 from Cython.Build import cythonize
 import numpy as np
 
+__version__ = '' # will be read from ksplit/ksplit_version.py
 exec(compile(open('ksplit/ksplit_version.py').read(),
              'ksplit/ksplit_version.py', 'exec'))
 
