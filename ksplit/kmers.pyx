@@ -32,7 +32,7 @@ cdef _kmers(char* seq, int n):
 
         kmer >>= 2
         kmer_rc <<= 2
-        kmer_rc &= ~(0x3 << (2*(KMER_SIZE-1)))
+        kmer_rc &= ~(<uint64_t>0x3 << (2*KMER_SIZE))
         nte = encode_nt(seq[i])
         if nte == -1:
             return

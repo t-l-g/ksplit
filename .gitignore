@@ -4,3 +4,4 @@ temp.linux-x86_64-*/
 /build/
 /dist/
 /ksplit.egg-info/
+.hypothesis
