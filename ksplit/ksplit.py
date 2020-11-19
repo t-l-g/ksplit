@@ -12,6 +12,16 @@ def encode_fastq(args, ifile, out):
     '''
     Returns the number of sequences encoded
 
+
+    Check the file `ALGORITHM.md` for a description of the on-disk format
+
+    Parameters
+    ----------
+
+    args : arguments
+    ifile (file-like): input file object (should be a FastQ file)
+    ofile (file-like): output file object (should be opened in binary mode)
+
     Example
     -------
     encode_fastq( { .. }, open(ifname, 'rb'), open(ofname, 'wb'))
