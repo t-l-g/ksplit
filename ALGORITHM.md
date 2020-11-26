@@ -11,6 +11,16 @@ All steps must be done in limited memory (out-of-core)
 
 ## Kmer profile computation and sorting
 
+### On disk format
+
+For sorting, the kmers are saved on disk. They are saved in a binary format
+such that each consecutive 8-Bytes (64 bits) correspond to an integer (machine
+format is assumed as these will not be shared across a network) and each
+consecutive two numbers form a pair (_i.e._, `[4302, 0, 9721, 0, 231, 0]`
+should be interpreted as `[(4302, 0), (9721, 0), (231, 0)]`). The first element
+of the pair is the encoded kmer, while the second element is the sequence
+identifier (sequences being identified by integer IDs, starting at zero).
+
 ## Union-find
 
 ## Min-cut
